@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:13.3
+    environment:
+      - POSTGRES_USER=gisp
+      - POSTGRES_PASSWORD=gisp
+      - POSTGRES_DB=gisp
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - "54321:54321"
+    volumes:
+      - ./data/pgdata:/var/lib/postgresql/data/pgdata
+      - ./data/postgresql.conf:/var/lib/postgresql/data/pgdata/postgresql.conf
+    restart: always
+  django:
+    image: django-gisp:dev
+    build:
+      context: .
+      dockerfile: DockerDjango
+    restart: always
+    depends_on:
+      - postgres
+    volumes:
+      - ./app:/app
+    ports:
+      - "8008:8008"
+
+
