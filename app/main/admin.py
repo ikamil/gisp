@@ -128,15 +128,17 @@ class OKPDAdmin(DictAdmin):
 
 @admin.register(Support)
 class SupportAdmin(BaseAdmin):
-    fields = ['url', 'small_name', 'full_name', 'number_npa', 'date_npa', 'npa_name', 'description', 'purpose',
+    fields = ['url', 'small_name', 'okved1_rate', 'okved2_rate', 'okved3_rate', 'total_rate',
+          'full_name', 'number_npa', 'date_npa', 'npa_name', 'description', 'purpose',
           'objective', 'type_mera', 'type_format_support', 'srok_vozvrata', 'procent_vozvrata', 'guarante_periode',
           'guarantee_cost', 'appliance_id', 'okved2', 'complexity', 'amount_of_support', 'regularity_select', 'period',
           'dogovor', 'gos_program', 'event', 'dop_info', 'is_not_active', 'prichina_not_act', 'req_zayavitel',
           'request_project', 'is_sofinance', 'dolya_isofinance', 'budget_project', 'pokazatel_result',
           'territorial_level', 'region', 'respons_structure', 'org_id']
-    list_display = ['small_name', 'region', 'description']
+    list_display = ['small_name', 'region', 'appliance_id', 'okved1_rate', 'okved2_rate', 'okved3_rate', 'total_rate']
     search_fields = ['small_name', 'full_name', 'region__name']
-    list_filter = ['region', BranchFilter]
+    list_filter = [BranchFilter, 'region']
+    ordering = ['-total_rate']
 
     class Media:
         pass
@@ -148,6 +150,14 @@ class NonFinanceSupAdmin(BaseAdmin):
     list_display = ['company', 'name', 'dict', 'okpd2']
     search_fields = ['name', 'company__name']
     raw_id_fields = ['company', 'dict', 'okpd2']
+
+
+@admin.register(BranchStat)
+class BranchStatAdmin(BaseAdmin):
+    fields = ['region', 'branch', 'okpd2', 'rate']
+    list_display = ['region', 'branch', 'okpd2', 'rate']
+    search_fields = ['region__name', 'branch__name', 'okpd2__name']
+    raw_id_fields = ['okpd2']
 
 
 @admin.register(Company)

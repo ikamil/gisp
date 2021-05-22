@@ -45,6 +45,10 @@ class Region(models.Model):
 class Support(models.Model):
     url = models.CharField(max_length=200, blank=True, null=True, verbose_name='URL записи')
     small_name = models.CharField(max_length=200, blank=True, null=True, verbose_name='Краткое наименование меры поддержки')
+    okved1_rate = models.IntegerField(blank=True, null=True, verbose_name='ОКВЭД-1')
+    okved2_rate = models.IntegerField(blank=True, null=True, verbose_name='ОКВЭД-2')
+    okved3_rate = models.IntegerField(blank=True, null=True, verbose_name='ОКВЭД-3')
+    total_rate = models.IntegerField(blank=True, null=True, verbose_name='Общий')
     full_name = models.CharField(max_length=200, blank=True, null=True, verbose_name='Полное наименование меры поддержки')
     number_npa = models.CharField(max_length=200, blank=True, null=True, verbose_name='Номер НПА меры поддержки')
     date_npa = models.CharField(max_length=200, blank=True, null=True, verbose_name='Дата НПА меры поддержки')
@@ -217,4 +221,26 @@ class NonFinanceSup(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class BranchStat(models.Model):
+    region = models.ForeignKey(Region, models.DO_NOTHING, verbose_name='Регион', related_name='+')
+    branch = models.ForeignKey(Branch, models.DO_NOTHING, verbose_name='Отрасль', related_name='+')
+    okpd2 = models.ForeignKey(OKPD, models.DO_NOTHING, verbose_name='ОКВЭД', related_name='+')
+    rate = models.IntegerField(blank=True, null=True, verbose_name='Показатель')
+    created = models.DateTimeField(blank=True, null=True)
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, related_name='+', blank=True, null=True)
+    modified = models.DateTimeField(blank=True, null=True)
+    modifier = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, related_name='+', blank=True, null=True)
+    deleted = models.DateTimeField(blank=True, null=True)
+    deleter = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, related_name='+', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbranchstat'
+        verbose_name = 'Статистика'
+        verbose_name_plural = 'Статистика'
+
+    def __str__(self):
+        return self.okpd2
 
