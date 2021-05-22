@@ -6,10 +6,28 @@ from django.utils.safestring import mark_safe
 from django.db.models import Q
 from django.urls import resolve
 from admin_auto_filters.filters import AutocompleteFilter
+from django.contrib.admin import SimpleListFilter
+
+
+class BranchFilter(SimpleListFilter):
+    title = 'Отрасль' # or use _('country') for translated title
+    parameter_name = 'appliance_id'
+
+    def lookups(self, request, model_admin):
+        return [(x.id, x.name) for x in Branch.objects.all()]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(appliance_id__contains=Branch.objects.get(pk=self.value()).name)
 
 
 def fnow():
     return timezone.make_aware(datetime.now(),timezone.get_default_timezone()).astimezone(timezone.get_default_timezone())
+
+
+class RegionFilter(AutocompleteFilter):
+    title = 'Регион' # display title
+    field_name = 'region' # name of the foreign key field
 
 
 class BaseAdmin(admin.ModelAdmin):
@@ -90,7 +108,7 @@ admin.site.enable_nav_sidebar = False
 
 @admin.register(Region)
 class RegionAdmin(DictAdmin):
-    pass
+    search_fields = ['name']
 
 
 @admin.register(Dict)
@@ -98,8 +116,8 @@ class DictAdmin(DictAdmin):
     pass
 
 
-@admin.register(OKPD)
-class OKPDAdmin(DictAdmin):
+@admin.register(Branch)
+class BranchAdmin(DictAdmin):
     pass
 
 
@@ -118,6 +136,18 @@ class SupportAdmin(BaseAdmin):
           'territorial_level', 'region', 'respons_structure', 'org_id']
     list_display = ['small_name', 'region', 'description']
     search_fields = ['small_name', 'full_name', 'region__name']
+    list_filter = ['region', BranchFilter]
+
+    class Media:
+        pass
+
+
+@admin.register(NonFinanceSup)
+class NonFinanceSupAdmin(BaseAdmin):
+    fields = ['company', 'name', 'dict', 'okpd2']
+    list_display = ['company', 'name', 'dict', 'okpd2']
+    search_fields = ['name', 'company__name']
+    raw_id_fields = ['company', 'dict', 'okpd2']
 
 
 @admin.register(Company)
@@ -128,4 +158,5 @@ class CompanyAdmin(BaseAdmin):
           'website', 'contact_number']
     list_display = ['name', 'region', 'company_status', 'real_address']
     search_fields = ['name', 'full_name', 'email', 'region__name']
+    list_filter = [RegionFilter]
 

@@ -159,6 +159,25 @@ class Dict(models.Model):
         return self.name
 
 
+class Branch(models.Model):
+    name = models.CharField(max_length=200, blank=True, null=True, verbose_name='Наименование')
+    created = models.DateTimeField(blank=True, null=True)
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, related_name='+', blank=True, null=True)
+    modified = models.DateTimeField(blank=True, null=True)
+    modifier = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, related_name='+', blank=True, null=True)
+    deleted = models.DateTimeField(blank=True, null=True)
+    deleter = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, related_name='+', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbranch'
+        verbose_name = 'Отрасль'
+        verbose_name_plural = 'Отрасли'
+
+    def __str__(self):
+        return self.name
+
+
 class OKPD(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True, verbose_name='Наименование')
     created = models.DateTimeField(blank=True, null=True)
@@ -182,7 +201,7 @@ class NonFinanceSup(models.Model):
     company = models.ForeignKey(Company, models.DO_NOTHING, verbose_name='Предприятие', related_name='+')
     name = models.CharField(max_length=200, blank=True, null=True, verbose_name='Мера поддержки')
     dict = models.ForeignKey(Dict, models.DO_NOTHING, verbose_name='Каталогизатор', related_name='+')
-    okpd2 = models.ForeignKey(Dict, models.DO_NOTHING, verbose_name='ОКПД2', related_name='+')
+    okpd2 = models.ForeignKey(OKPD, models.DO_NOTHING, verbose_name='ОКПД2', related_name='+')
     created = models.DateTimeField(blank=True, null=True)
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, related_name='+', blank=True, null=True)
     modified = models.DateTimeField(blank=True, null=True)
@@ -193,8 +212,8 @@ class NonFinanceSup(models.Model):
     class Meta:
         managed = False
         db_table = 'tnonfinancesup'
-        verbose_name = 'Нефинансовая поддержка'
-        verbose_name_plural = 'Нефинансовые поддержки'
+        verbose_name = 'Сертифицированный продукт'
+        verbose_name_plural = 'Сертифицированные продукты'
 
     def __str__(self):
         return self.name
