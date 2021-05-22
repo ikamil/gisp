@@ -12,6 +12,7 @@ services:
     volumes:
       - ./data/pgdata:/var/lib/postgresql/data/pgdata
       - ./data/postgresql.conf:/var/lib/postgresql/data/pgdata/postgresql.conf
+      - ./data/imp:/var/imp
     restart: always
   django:
     image: django-gisp:dev

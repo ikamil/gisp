@@ -70,6 +70,12 @@ class BaseAdmin(admin.ModelAdmin):
         return super(BaseAdmin, self)._changeform_view(request, object_id=object_id, form_url=form_url, extra_context=extra_context)
 
 
+class DictAdmin(BaseAdmin):
+    list_display = ['name']
+    fields = ['name', 'modified']
+    search_fields = ['name']
+
+
 class ImageBaseAdmin(BaseAdmin):
     def img(self, obj):
         return mark_safe("""<img width="100px" src="%s">""" % ((str(obj.image) if str(obj.image).startswith('http') else obj.image.url) if obj.image else ''))
@@ -83,17 +89,43 @@ admin.site.enable_nav_sidebar = False
 
 
 @admin.register(Region)
-class RegionAdmin(ImageBaseAdmin):
+class RegionAdmin(DictAdmin):
+    pass
+
+
+@admin.register(Dict)
+class DictAdmin(DictAdmin):
+    pass
+
+
+@admin.register(OKPD)
+class OKPDAdmin(DictAdmin):
+    pass
+
+
+@admin.register(OKPD)
+class OKPDAdmin(DictAdmin):
     pass
 
 
 @admin.register(Support)
-class SupportAdmin(ImageBaseAdmin):
+class SupportAdmin(BaseAdmin):
     fields = ['url', 'small_name', 'full_name', 'number_npa', 'date_npa', 'npa_name', 'description', 'purpose',
           'objective', 'type_mera', 'type_format_support', 'srok_vozvrata', 'procent_vozvrata', 'guarante_periode',
           'guarantee_cost', 'appliance_id', 'okved2', 'complexity', 'amount_of_support', 'regularity_select', 'period',
           'dogovor', 'gos_program', 'event', 'dop_info', 'is_not_active', 'prichina_not_act', 'req_zayavitel',
           'request_project', 'is_sofinance', 'dolya_isofinance', 'budget_project', 'pokazatel_result',
           'territorial_level', 'region', 'respons_structure', 'org_id']
-    list_display = ['small_name', 'region', 'description', 'procent_vozvrata', 'amount_of_support', 'event']
+    list_display = ['small_name', 'region', 'description']
+    search_fields = ['small_name', 'full_name', 'region__name']
+
+
+@admin.register(Company)
+class CompanyAdmin(BaseAdmin):
+    fields = ['full_name', 'email', 'platforms', 'okved2', 'enterprise_type', 'main_activity', 'additional_activity',
+          'legal_form', 'company_type', 'company_status', 'reg_date', 'tax_code', 'real_address', 'attributes', 'name',
+          'organization_type', 'industry', 'ogrn', 'inn', 'checkpoint', 'region', 'address', 'contact_email',
+          'website', 'contact_number']
+    list_display = ['name', 'region', 'company_status', 'real_address']
+    search_fields = ['name', 'full_name', 'email', 'region__name']
 

@@ -96,3 +96,106 @@ class Support(models.Model):
     def __str__(self):
         return self.small_name
 
+
+class Company(models.Model):
+    full_name = models.CharField(max_length=200, blank=True, null=True, verbose_name='Полное наименование организации')
+    email = models.CharField(max_length=200, blank=True, null=True, verbose_name='Email')
+    platforms = models.CharField(max_length=200, blank=True, null=True, verbose_name='Электронные площадки торгов, на которых зарегистрировано и работает предприятие')
+    okved2 = models.CharField(max_length=200, blank=True, null=True, verbose_name='ОКВЭД2')
+    enterprise_type = models.CharField(max_length=200, blank=True, null=True, verbose_name='Тип предприятия')
+    main_activity = models.CharField(max_length=200, blank=True, null=True, verbose_name='Вид деятельности, основной ТАСС')
+    additional_activity = models.CharField(max_length=200, blank=True, null=True, verbose_name='Вид деятельности, дополнительный ТАСС')
+    legal_form = models.CharField(max_length=200, blank=True, null=True, verbose_name='Организационно правовая форма')
+    company_type = models.CharField(max_length=200, blank=True, null=True, verbose_name='Тип компании')
+    company_status = models.CharField(max_length=200, blank=True, null=True, verbose_name='Статус компании')
+    reg_date = models.CharField(max_length=200, blank=True, null=True, verbose_name='Дата постановки на учет в налоговом органе')
+    tax_code = models.CharField(max_length=200, blank=True, null=True, verbose_name='Код налогового органа, поставившего на учет')
+    real_address = models.CharField(max_length=200, blank=True, null=True, verbose_name='Фактический адрес')
+    attributes = models.CharField(max_length=200, blank=True, null=True, verbose_name='Атрибуты предприятия')
+    name = models.CharField(max_length=200, blank=True, null=True, verbose_name='Название')
+    organization_type = models.CharField(max_length=200, blank=True, null=True, verbose_name='Вид организации')
+    industry = models.CharField(max_length=200, blank=True, null=True, verbose_name='Отрасль')
+    ogrn = models.CharField(max_length=200, blank=True, null=True, verbose_name='ОГРН')
+    inn = models.CharField(max_length=200, blank=True, null=True, verbose_name='ИНН')
+    checkpoint = models.CharField(max_length=200, blank=True, null=True, verbose_name='КПП')
+    region = models.ForeignKey(Region, models.DO_NOTHING, verbose_name='Регион')
+    address = models.CharField(max_length=200, blank=True, null=True, verbose_name='Адрес')
+    contact_email = models.CharField(max_length=200, blank=True, null=True, verbose_name='Контактный email')
+    website = models.CharField(max_length=200, blank=True, null=True, verbose_name='Адрес сайта')
+    contact_number = models.CharField(max_length=200, blank=True, null=True, verbose_name='Контактный телефон')
+    created = models.DateTimeField(blank=True, null=True, default=now)
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, related_name='+', blank=True, null=True)
+    modified = models.DateTimeField(blank=True, null=True, default=now)
+    modifier = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, related_name='+', blank=True, null=True)
+    deleted = models.DateTimeField(blank=True, null=True)
+    deleter = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, related_name='+', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tcompany'
+        verbose_name = 'Предприятие'
+        verbose_name_plural = 'Предприятия'
+
+    def __str__(self):
+        return self.name
+
+
+class Dict(models.Model):
+    name = models.CharField(max_length=200, blank=True, null=True, verbose_name='Наименование')
+    created = models.DateTimeField(blank=True, null=True)
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, related_name='+', blank=True, null=True)
+    modified = models.DateTimeField(blank=True, null=True)
+    modifier = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, related_name='+', blank=True, null=True)
+    deleted = models.DateTimeField(blank=True, null=True)
+    deleter = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, related_name='+', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tdict'
+        verbose_name = 'Каталог'
+        verbose_name_plural = 'Каталогизатор'
+
+    def __str__(self):
+        return self.name
+
+
+class OKPD(models.Model):
+    name = models.CharField(max_length=200, blank=True, null=True, verbose_name='Наименование')
+    created = models.DateTimeField(blank=True, null=True)
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, related_name='+', blank=True, null=True)
+    modified = models.DateTimeField(blank=True, null=True)
+    modifier = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, related_name='+', blank=True, null=True)
+    deleted = models.DateTimeField(blank=True, null=True)
+    deleter = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, related_name='+', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tokpd'
+        verbose_name = 'ОКПД'
+        verbose_name_plural = 'Список ОПКД'
+
+    def __str__(self):
+        return self.name
+
+
+class NonFinanceSup(models.Model):
+    company = models.ForeignKey(Company, models.DO_NOTHING, verbose_name='Предприятие', related_name='+')
+    name = models.CharField(max_length=200, blank=True, null=True, verbose_name='Мера поддержки')
+    dict = models.ForeignKey(Dict, models.DO_NOTHING, verbose_name='Каталогизатор', related_name='+')
+    okpd2 = models.ForeignKey(Dict, models.DO_NOTHING, verbose_name='ОКПД2', related_name='+')
+    created = models.DateTimeField(blank=True, null=True)
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, related_name='+', blank=True, null=True)
+    modified = models.DateTimeField(blank=True, null=True)
+    modifier = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, related_name='+', blank=True, null=True)
+    deleted = models.DateTimeField(blank=True, null=True)
+    deleter = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, related_name='+', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tnonfinancesup'
+        verbose_name = 'Нефинансовая поддержка'
+        verbose_name_plural = 'Нефинансовые поддержки'
+
+    def __str__(self):
+        return self.name
+
