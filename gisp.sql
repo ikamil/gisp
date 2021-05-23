@@ -1,3 +1,5 @@
+--- Создание и заполнение основных справочников
+
 create table tregion (id serial primary key , name varchar(200), image varchar(500), description text
     , created timestamp default now(), creator_id bigint constraint fk_region_creator references auth_user
     , modified timestamp default now(), modifier_id bigint constraint fk_region_modifier references auth_user
@@ -185,6 +187,9 @@ select s.id, c.id company_id, o.id okpd2_id, d.id dict_id, s.name from nonfinanc
 
 select count(1) from tnonfinancesup;
 
+
+--- Создание и заполнение JSON таблиц
+
 drop table allocators;
 
 create table allocators (dta text);
@@ -243,7 +248,7 @@ copy subs from 'C:\temp\hack2021\folder\subs_dump_18.json';
 alter table subs add js jsonb;
 
 
--- Очистка JSON файлов от невалидных элементов
+-- Очистка JSON таблиц от невалидных элементов
 
 create table subs2 (js jsonb );
 
