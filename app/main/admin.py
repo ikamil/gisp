@@ -139,6 +139,7 @@ class SupportAdmin(BaseAdmin):
     search_fields = ['small_name', 'full_name', 'region__name']
     list_filter = [BranchFilter, 'region']
     ordering = ['-total_rate']
+    readonly_fields = ['okved1_rate', 'okved2_rate', 'okved3_rate', 'total_rate']
 
     class Media:
         pass
