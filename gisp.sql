@@ -97,6 +97,9 @@ update tcompany s set region_id=r.id from tregion r where r.name=trim(split_part
 
 select distinct region from tcompany where region_id is null and region is not null ;
 
+
+--- Формирование промежуточных статистических и справочных данных
+
 create table nonfinancesup (id int, name text, ogrn bigint, okpd2 text);
 
 copy nonfinancesup from '/var/imp/nonfinancesup.csv' with (delimiter ',', format csv, header);
@@ -188,7 +191,7 @@ select s.id, c.id company_id, o.id okpd2_id, d.id dict_id, s.name from nonfinanc
 select count(1) from tnonfinancesup;
 
 
---- Создание и заполнение JSON таблиц
+--- Создание и заполнение JSON таблиц (часть данных обрабатывается в локальном Postgres, поэтому путь файла не Unix
 
 drop table allocators;
 
