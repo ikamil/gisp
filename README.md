@@ -1,4 +1,5 @@
 **GISP - Data as an Asset**
+
 A web application prototype https://gisp.kambox.ru/ demonstrating the functionality and user UX in the process of automated calculation of recommended support measures.
 
 As an example, the prototype implements a demonstration of ranking available support measures for a new user. To obtain a convenient ranked list of support measures, the user simply needs to specify their region and industry.
