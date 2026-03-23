@@ -1,18 +1,12 @@
-**ГИСП - Данные как актив**
+**GISP - Data as an Asset**
+A web application prototype https://gisp.kambox.ru/ demonstrating the functionality and user UX in the process of automated calculation of recommended support measures.
 
-Прототип Web-приложения https://gisp.kambox.ru/, демонстрирующий функционал и UX пользователя в процессе автоматизированного вычисления рекомендуемых мер поддержки.
-(логин kam, пароль kam12345)
+As an example, the prototype implements a demonstration of ranking available support measures for a new user. To obtain a convenient ranked list of support measures, the user simply needs to specify their region and industry.
+After providing these two parameters, the user is presented with a compact list of support measures ranked by a Rating score, along with information on the detailed ranking criteria.
+For a registered user, the rating-ranked list of available support measures can be provided immediately upon login, since both primary filtering parameters are already available in the user's profile (region and industry are required during registration).
 
-В качестве примера реализована демонстрация ранжирования доступных мер поддержки для нового пользователя. Для получения удобного ранжированного списка мер поддержки, достаточно указать регион и отрасль предприятия.
-
-После указания этих двух факторов, пользователю предлагается компактный список мер поддержки, ранжированный по показателю Рейтинга, а также информация детальным критериям ранжирования.
-
-Для зарегистрированного пользователя ранжированный по рейтингу список доступных мер поддержки может быть предоставлен сразу после авторизации, так как в контексте пользователя оба параметра первичной фильтрации имеются (регион и отрасль обязательны для регистрации).
-
-
-**Дальнейшее развитие**
-
-Разработка модели машинного обучения, учитывающую контекстные ключевые фразы:
-1. Разработка списка принципиальных ключевых слов, подходящих для ранжирования мер
-2. Формирование 10-15 наборов ключевых слов для рекламных кампаний
-3. Вычисление рекомендательного рейтинга для каждого ключевого слова
+**Further development**
+Development of a machine learning model that takes contextual key phrases into account:
+1. Developing a list of principal keywords suitable for ranking support measures
+2. Forming 10–15 keyword sets for advertising campaigns
+3. Computing a recommendation rating for each keyword
